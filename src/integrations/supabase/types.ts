@@ -7,13 +7,51 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.12 (cd3cf9e)"
   }
   public: {
     Tables: {
+      agendamento_execucoes: {
+        Row: {
+          created_at: string
+          data_execucao: string
+          erro_mensagem: string | null
+          id: string
+          post_agendado_id: string
+          status_execucao: string
+          tentativas: number
+        }
+        Insert: {
+          created_at?: string
+          data_execucao?: string
+          erro_mensagem?: string | null
+          id?: string
+          post_agendado_id: string
+          status_execucao?: string
+          tentativas?: number
+        }
+        Update: {
+          created_at?: string
+          data_execucao?: string
+          erro_mensagem?: string | null
+          id?: string
+          post_agendado_id?: string
+          status_execucao?: string
+          tentativas?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agendamento_execucoes_post_agendado_id_fkey"
+            columns: ["post_agendado_id"]
+            isOneToOne: false
+            referencedRelation: "posts_agendados"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       analytics_events: {
         Row: {
           browser_name: string | null
@@ -119,6 +157,36 @@ export type Database = {
           },
         ]
       }
+      app_statistics: {
+        Row: {
+          additional_data: Json | null
+          created_at: string | null
+          date_recorded: string | null
+          id: string
+          metric_name: string
+          metric_type: string
+          metric_value: string
+        }
+        Insert: {
+          additional_data?: Json | null
+          created_at?: string | null
+          date_recorded?: string | null
+          id?: string
+          metric_name: string
+          metric_type: string
+          metric_value: string
+        }
+        Update: {
+          additional_data?: Json | null
+          created_at?: string | null
+          date_recorded?: string | null
+          id?: string
+          metric_name?: string
+          metric_type?: string
+          metric_value?: string
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -178,6 +246,86 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      bonus_user_actions: {
+        Row: {
+          action_type: string
+          bonus_user_id: string | null
+          created_at: string | null
+          id: string
+          model_id: string | null
+          points_earned: number | null
+          video_id: string | null
+        }
+        Insert: {
+          action_type: string
+          bonus_user_id?: string | null
+          created_at?: string | null
+          id?: string
+          model_id?: string | null
+          points_earned?: number | null
+          video_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          bonus_user_id?: string | null
+          created_at?: string | null
+          id?: string
+          model_id?: string | null
+          points_earned?: number | null
+          video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bonus_user_actions_bonus_user_id_fkey"
+            columns: ["bonus_user_id"]
+            isOneToOne: false
+            referencedRelation: "bonus_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bonus_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          is_verified: boolean | null
+          location: string | null
+          name: string
+          points: number | null
+          status: string | null
+          total_spent: number | null
+          updated_at: string | null
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          is_verified?: boolean | null
+          location?: string | null
+          name: string
+          points?: number | null
+          status?: string | null
+          total_spent?: number | null
+          updated_at?: string | null
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          is_verified?: boolean | null
+          location?: string | null
+          name?: string
+          points?: number | null
+          status?: string | null
+          total_spent?: number | null
+          updated_at?: string | null
+          whatsapp?: string
+        }
+        Relationships: []
       }
       campaign_participations: {
         Row: {
@@ -881,6 +1029,116 @@ export type Database = {
           },
         ]
       }
+      daily_missions: {
+        Row: {
+          action_type: string
+          category: string | null
+          created_at: string
+          description: string | null
+          difficulty: string
+          icon: string | null
+          id: string
+          is_active: boolean
+          max_completions_per_day: number | null
+          points_reward: number
+          priority: number
+          requirements: Json | null
+          reward_description: string | null
+          target_count: number
+          time_limit_hours: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          action_type: string
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty?: string
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          max_completions_per_day?: number | null
+          points_reward?: number
+          priority?: number
+          requirements?: Json | null
+          reward_description?: string | null
+          target_count?: number
+          time_limit_hours?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          action_type?: string
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty?: string
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          max_completions_per_day?: number | null
+          points_reward?: number
+          priority?: number
+          requirements?: Json | null
+          reward_description?: string | null
+          target_count?: number
+          time_limit_hours?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      daily_tasks: {
+        Row: {
+          completed_tasks: number | null
+          created_at: string | null
+          id: string
+          is_completed: boolean | null
+          last_action_at: string | null
+          points_earned_today: number | null
+          reset_at: string | null
+          task_date: string | null
+          total_actions: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          completed_tasks?: number | null
+          created_at?: string | null
+          id?: string
+          is_completed?: boolean | null
+          last_action_at?: string | null
+          points_earned_today?: number | null
+          reset_at?: string | null
+          task_date?: string | null
+          total_actions?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          completed_tasks?: number | null
+          created_at?: string | null
+          id?: string
+          is_completed?: boolean | null
+          last_action_at?: string | null
+          points_earned_today?: number | null
+          reset_at?: string | null
+          task_date?: string | null
+          total_actions?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_tasks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "bonus_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deteccao_movimento: {
         Row: {
           calorias_estimadas: number | null
@@ -946,6 +1204,56 @@ export type Database = {
           velocidade_media?: number | null
         }
         Relationships: []
+      }
+      email_logs: {
+        Row: {
+          body: string | null
+          created_at: string | null
+          error_message: string | null
+          external_id: string | null
+          id: string
+          integration_id: string | null
+          provider: string
+          recipient_email: string
+          sent_at: string | null
+          status: string
+          subject: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          external_id?: string | null
+          id?: string
+          integration_id?: string | null
+          provider: string
+          recipient_email: string
+          sent_at?: string | null
+          status?: string
+          subject: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          external_id?: string | null
+          id?: string
+          integration_id?: string | null
+          provider?: string
+          recipient_email?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_logs_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       eventos_analytics: {
         Row: {
@@ -1058,6 +1366,198 @@ export type Database = {
         }
         Relationships: []
       }
+      gamification_actions: {
+        Row: {
+          action_type: string
+          created_at: string
+          date_performed: string
+          id: string
+          ip_address: string | null
+          model_id: string | null
+          points_earned: number
+          user_agent: string | null
+          user_id: string
+          video_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          date_performed?: string
+          id?: string
+          ip_address?: string | null
+          model_id?: string | null
+          points_earned?: number
+          user_agent?: string | null
+          user_id: string
+          video_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          date_performed?: string
+          id?: string
+          ip_address?: string | null
+          model_id?: string | null
+          points_earned?: number
+          user_agent?: string | null
+          user_id?: string
+          video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gamification_actions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "gamification_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gamification_daily_tasks: {
+        Row: {
+          completed_tasks: number
+          created_at: string
+          id: string
+          is_completed: boolean
+          last_action_at: string
+          points_earned_today: number
+          reset_at: string
+          task_date: string
+          total_actions: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_tasks?: number
+          created_at?: string
+          id?: string
+          is_completed?: boolean
+          last_action_at?: string
+          points_earned_today?: number
+          reset_at?: string
+          task_date?: string
+          total_actions?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_tasks?: number
+          created_at?: string
+          id?: string
+          is_completed?: boolean
+          last_action_at?: string
+          points_earned_today?: number
+          reset_at?: string
+          task_date?: string
+          total_actions?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gamification_daily_tasks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "gamification_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gamification_rankings: {
+        Row: {
+          created_at: string
+          current_streak: number
+          id: string
+          last_activity_at: string
+          level_name: string
+          max_streak: number
+          position: number | null
+          total_points: number
+          total_tasks_completed: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_streak?: number
+          id?: string
+          last_activity_at?: string
+          level_name?: string
+          max_streak?: number
+          position?: number | null
+          total_points?: number
+          total_tasks_completed?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_streak?: number
+          id?: string
+          last_activity_at?: string
+          level_name?: string
+          max_streak?: number
+          position?: number | null
+          total_points?: number
+          total_tasks_completed?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gamification_rankings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "gamification_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gamification_users: {
+        Row: {
+          created_at: string
+          current_streak: number
+          email: string
+          id: string
+          is_premium: boolean
+          level_name: string
+          max_streak: number
+          name: string
+          registered_from: string | null
+          status: string
+          total_points: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_streak?: number
+          email: string
+          id?: string
+          is_premium?: boolean
+          level_name?: string
+          max_streak?: number
+          name: string
+          registered_from?: string | null
+          status?: string
+          total_points?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_streak?: number
+          email?: string
+          id?: string
+          is_premium?: boolean
+          level_name?: string
+          max_streak?: number
+          name?: string
+          registered_from?: string | null
+          status?: string
+          total_points?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       historico_localizacoes: {
         Row: {
           altitude: number | null
@@ -1124,6 +1624,39 @@ export type Database = {
           tipo_movimento?: string | null
           usuario_id?: string | null
           velocidade_detectada?: number | null
+        }
+        Relationships: []
+      }
+      integrations: {
+        Row: {
+          configuration: Json
+          created_at: string | null
+          id: string
+          integration_type: string
+          is_active: boolean | null
+          last_used_at: string | null
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string | null
+          id?: string
+          integration_type: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string | null
+          id?: string
+          integration_type?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          name?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -2093,6 +2626,153 @@ export type Database = {
           },
         ]
       }
+      payment_events: {
+        Row: {
+          amount: number | null
+          created_at: string | null
+          currency: string | null
+          customer_email: string | null
+          customer_name: string | null
+          event_type: string
+          external_id: string
+          id: string
+          processed_at: string | null
+          provider: string
+          raw_payload: Json
+          status: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string | null
+          currency?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          event_type: string
+          external_id: string
+          id?: string
+          processed_at?: string | null
+          provider: string
+          raw_payload: Json
+          status: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string | null
+          currency?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          event_type?: string
+          external_id?: string
+          id?: string
+          processed_at?: string | null
+          provider?: string
+          raw_payload?: Json
+          status?: string
+        }
+        Relationships: []
+      }
+      pix_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          name: string
+          paid_at: string | null
+          pix_code: string
+          status: string
+          txid: string
+          updated_at: string
+          user_id: string | null
+          whatsapp: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          name: string
+          paid_at?: string | null
+          pix_code: string
+          status?: string
+          txid: string
+          updated_at?: string
+          user_id?: string | null
+          whatsapp: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          name?: string
+          paid_at?: string | null
+          pix_code?: string
+          status?: string
+          txid?: string
+          updated_at?: string
+          user_id?: string | null
+          whatsapp?: string
+        }
+        Relationships: []
+      }
+      platform_connections: {
+        Row: {
+          access_token: string | null
+          api_key: string | null
+          api_secret: string | null
+          configuration: Json | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          monthly_revenue: number | null
+          platform_name: string
+          refresh_token: string | null
+          status: string
+          total_users: number | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          access_token?: string | null
+          api_key?: string | null
+          api_secret?: string | null
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          monthly_revenue?: number | null
+          platform_name: string
+          refresh_token?: string | null
+          status?: string
+          total_users?: number | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          access_token?: string | null
+          api_key?: string | null
+          api_secret?: string | null
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          monthly_revenue?: number | null
+          platform_name?: string
+          refresh_token?: string | null
+          status?: string
+          total_users?: number | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
       points_history: {
         Row: {
           admin_user_id: string | null
@@ -2180,6 +2860,136 @@ export type Database = {
             columns: ["video_id"]
             isOneToOne: false
             referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts_agendados: {
+        Row: {
+          conteudo_url: string
+          created_at: string
+          data_agendamento: string
+          data_publicacao: string | null
+          descricao: string | null
+          enviar_tela_principal: boolean
+          id: string
+          imagens: string[] | null
+          modelo_id: string
+          modelo_username: string
+          status: string
+          tipo_conteudo: string
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          conteudo_url: string
+          created_at?: string
+          data_agendamento: string
+          data_publicacao?: string | null
+          descricao?: string | null
+          enviar_tela_principal?: boolean
+          id?: string
+          imagens?: string[] | null
+          modelo_id: string
+          modelo_username: string
+          status?: string
+          tipo_conteudo?: string
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          conteudo_url?: string
+          created_at?: string
+          data_agendamento?: string
+          data_publicacao?: string | null
+          descricao?: string | null
+          enviar_tela_principal?: boolean
+          id?: string
+          imagens?: string[] | null
+          modelo_id?: string
+          modelo_username?: string
+          status?: string
+          tipo_conteudo?: string
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_agendados_modelo_id_fkey"
+            columns: ["modelo_id"]
+            isOneToOne: false
+            referencedRelation: "models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_agendados_modelo_id_fkey"
+            columns: ["modelo_id"]
+            isOneToOne: false
+            referencedRelation: "popular_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts_principais: {
+        Row: {
+          conteudo_url: string
+          created_at: string
+          descricao: string | null
+          id: string
+          is_active: boolean
+          modelo_id: string
+          modelo_username: string
+          post_agendado_id: string | null
+          tipo_conteudo: string
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          conteudo_url: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          is_active?: boolean
+          modelo_id: string
+          modelo_username: string
+          post_agendado_id?: string | null
+          tipo_conteudo?: string
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          conteudo_url?: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          is_active?: boolean
+          modelo_id?: string
+          modelo_username?: string
+          post_agendado_id?: string | null
+          tipo_conteudo?: string
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_principais_modelo_id_fkey"
+            columns: ["modelo_id"]
+            isOneToOne: false
+            referencedRelation: "models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_principais_modelo_id_fkey"
+            columns: ["modelo_id"]
+            isOneToOne: false
+            referencedRelation: "popular_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_principais_post_agendado_id_fkey"
+            columns: ["post_agendado_id"]
+            isOneToOne: false
+            referencedRelation: "posts_agendados"
             referencedColumns: ["id"]
           },
         ]
@@ -2281,6 +3091,98 @@ export type Database = {
           video_id?: string | null
         }
         Relationships: []
+      }
+      premium_members: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          monthly_fee: number | null
+          plan_type: string | null
+          signup_date: string | null
+          user_email: string
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          monthly_fee?: number | null
+          plan_type?: string | null
+          signup_date?: string | null
+          user_email: string
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          monthly_fee?: number | null
+          plan_type?: string | null
+          signup_date?: string | null
+          user_email?: string
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
+      premium_users: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          payment_id: string | null
+          subscription_end: string
+          subscription_start: string
+          subscription_status: string
+          subscription_type: string
+          updated_at: string
+          user_id: string | null
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          payment_id?: string | null
+          subscription_end?: string
+          subscription_start?: string
+          subscription_status?: string
+          subscription_type?: string
+          updated_at?: string
+          user_id?: string | null
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          payment_id?: string | null
+          subscription_end?: string
+          subscription_start?: string
+          subscription_status?: string
+          subscription_type?: string
+          updated_at?: string
+          user_id?: string | null
+          whatsapp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "premium_users_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "pix_payments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -2448,6 +3350,81 @@ export type Database = {
           },
         ]
       }
+      sales: {
+        Row: {
+          created_at: string | null
+          customer_id: string | null
+          customer_name: string | null
+          id: string
+          is_active: boolean | null
+          model_id: string
+          model_name: string
+          product_name: string
+          sale_date: string | null
+          sale_value: number
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id?: string | null
+          customer_name?: string | null
+          id?: string
+          is_active?: boolean | null
+          model_id: string
+          model_name: string
+          product_name: string
+          sale_date?: string | null
+          sale_value: number
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string | null
+          customer_name?: string | null
+          id?: string
+          is_active?: boolean | null
+          model_id?: string
+          model_name?: string
+          product_name?: string
+          sale_date?: string | null
+          sale_value?: number
+        }
+        Relationships: []
+      }
+      security_logs: {
+        Row: {
+          created_at: string | null
+          event_description: string | null
+          event_type: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          severity: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_description?: string | null
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          severity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_description?: string | null
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          severity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       shares: {
         Row: {
           created_at: string | null
@@ -2560,6 +3537,53 @@ export type Database = {
         }
         Relationships: []
       }
+      sms_logs: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          external_id: string | null
+          id: string
+          integration_id: string | null
+          message: string
+          provider: string
+          recipient_phone: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          external_id?: string | null
+          id?: string
+          integration_id?: string | null
+          message: string
+          provider: string
+          recipient_phone: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          external_id?: string | null
+          id?: string
+          integration_id?: string | null
+          message?: string
+          provider?: string
+          recipient_phone?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_logs_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       system_settings: {
         Row: {
           category: string | null
@@ -2599,6 +3623,42 @@ export type Database = {
           setting_value?: Json | null
           updated_at?: string | null
           version?: number | null
+        }
+        Relationships: []
+      }
+      system_status: {
+        Row: {
+          additional_info: Json | null
+          created_at: string | null
+          id: string
+          last_check_at: string | null
+          response_time: number | null
+          service_name: string
+          status: string
+          updated_at: string | null
+          uptime_percentage: number | null
+        }
+        Insert: {
+          additional_info?: Json | null
+          created_at?: string | null
+          id?: string
+          last_check_at?: string | null
+          response_time?: number | null
+          service_name: string
+          status: string
+          updated_at?: string | null
+          uptime_percentage?: number | null
+        }
+        Update: {
+          additional_info?: Json | null
+          created_at?: string | null
+          id?: string
+          last_check_at?: string | null
+          response_time?: number | null
+          service_name?: string
+          status?: string
+          updated_at?: string | null
+          uptime_percentage?: number | null
         }
         Relationships: []
       }
@@ -2658,6 +3718,282 @@ export type Database = {
           valor_pontos?: number | null
         }
         Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          customer_email: string | null
+          customer_name: string
+          external_transaction_id: string | null
+          fees: number | null
+          gateway_provider: string | null
+          gateway_response: Json | null
+          id: string
+          metadata: Json | null
+          model_id: string | null
+          net_amount: number | null
+          payment_method: string
+          processed_at: string | null
+          status: string
+          transaction_type: string
+          updated_at: string
+          webhook_received_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          customer_email?: string | null
+          customer_name: string
+          external_transaction_id?: string | null
+          fees?: number | null
+          gateway_provider?: string | null
+          gateway_response?: Json | null
+          id?: string
+          metadata?: Json | null
+          model_id?: string | null
+          net_amount?: number | null
+          payment_method: string
+          processed_at?: string | null
+          status?: string
+          transaction_type: string
+          updated_at?: string
+          webhook_received_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          customer_email?: string | null
+          customer_name?: string
+          external_transaction_id?: string | null
+          fees?: number | null
+          gateway_provider?: string | null
+          gateway_response?: Json | null
+          id?: string
+          metadata?: Json | null
+          model_id?: string | null
+          net_amount?: number | null
+          payment_method?: string
+          processed_at?: string | null
+          status?: string
+          transaction_type?: string
+          updated_at?: string
+          webhook_received_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "popular_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_actions: {
+        Row: {
+          action_type: string
+          created_at: string | null
+          date_performed: string | null
+          id: string
+          ip_address: unknown | null
+          model_id: string | null
+          points_earned: number | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+          video_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string | null
+          date_performed?: string | null
+          id?: string
+          ip_address?: unknown | null
+          model_id?: string | null
+          points_earned?: number | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          video_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string | null
+          date_performed?: string | null
+          id?: string
+          ip_address?: unknown | null
+          model_id?: string | null
+          points_earned?: number | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_actions_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_actions_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "popular_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_actions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "bonus_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_actions_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_mission_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          date_started: string
+          id: string
+          is_completed: boolean
+          mission_id: string
+          points_earned: number | null
+          progress_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          date_started?: string
+          id?: string
+          is_completed?: boolean
+          mission_id: string
+          points_earned?: number | null
+          progress_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          date_started?: string
+          id?: string
+          is_completed?: boolean
+          mission_id?: string
+          points_earned?: number | null
+          progress_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_mission_progress_mission_id_fkey"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "daily_missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_notifications: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          sent_at: string | null
+          title: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          sent_at?: string | null
+          title: string
+          type?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          sent_at?: string | null
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      user_rankings: {
+        Row: {
+          created_at: string | null
+          current_streak: number | null
+          id: string
+          last_activity_at: string | null
+          level_name: string | null
+          max_streak: number | null
+          total_points: number | null
+          total_tasks_completed: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_streak?: number | null
+          id?: string
+          last_activity_at?: string | null
+          level_name?: string | null
+          max_streak?: number | null
+          total_points?: number | null
+          total_tasks_completed?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_streak?: number | null
+          id?: string
+          last_activity_at?: string | null
+          level_name?: string | null
+          max_streak?: number | null
+          total_points?: number | null
+          total_tasks_completed?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_rankings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "bonus_users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_sessions: {
         Row: {
@@ -3065,6 +4401,45 @@ export type Database = {
           },
         ]
       }
+      webhook_events: {
+        Row: {
+          created_at: string | null
+          event_type: string
+          id: string
+          payload: Json
+          processed_at: string | null
+          response_body: string | null
+          response_status: number | null
+          retry_count: number | null
+          status: string
+          webhook_url: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_type: string
+          id?: string
+          payload: Json
+          processed_at?: string | null
+          response_body?: string | null
+          response_status?: number | null
+          retry_count?: number | null
+          status?: string
+          webhook_url: string
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+          response_body?: string | null
+          response_status?: number | null
+          retry_count?: number | null
+          status?: string
+          webhook_url?: string
+        }
+        Relationships: []
+      }
       zonas_geograficas: {
         Row: {
           ativa: boolean | null
@@ -3180,30 +4555,30 @@ export type Database = {
       }
       atualizar_localizacao_usuario: {
         Args: {
+          endereco?: string
           id_usuario: string
           lat: number
           lng: number
           precisao?: number
-          endereco?: string
           tipo_disp?: string
         }
         Returns: string
       }
       atualizar_pontuacao_usuario: {
         Args: {
-          id_usuario: string
           acao: string
+          id_usuario: string
           pontos: number
           referencia_id?: string
         }
         Returns: boolean
       }
       calcular_distancia: {
-        Args: { lat1: number; lng1: number; lat2: number; lng2: number }
+        Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
       detectar_movimento: {
-        Args: { id_usuario: string; velocidade: number; coordenadas: Json }
+        Args: { coordenadas: Json; id_usuario: string; velocidade: number }
         Returns: string
       }
       ensure_guest_user: {
@@ -3220,26 +4595,53 @@ export type Database = {
         Returns: string
       }
       get_daily_points_status: {
-        Args: { p_user_id: string; p_action_type: string }
+        Args: { p_action_type: string; p_user_id: string }
         Returns: Json
       }
       is_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      processar_posts_agendados: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      processar_posts_agendados_manual: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       register_daily_action: {
         Args: {
-          p_user_id: string
           p_action_type: string
-          p_video_id?: string
           p_model_id?: string
           p_points?: number
+          p_user_id: string
+          p_video_id?: string
+        }
+        Returns: Json
+      }
+      register_gamification_action: {
+        Args: {
+          p_action_type: string
+          p_ip_address?: string
+          p_model_id?: string
+          p_user_agent?: string
+          p_user_id: string
+          p_video_id?: string
         }
         Returns: Json
       }
       testar_sistema: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      update_mission_progress: {
+        Args: { p_action_type: string; p_increment?: number; p_user_id: string }
+        Returns: Json
+      }
+      validate_gmail: {
+        Args: { email_input: string }
+        Returns: boolean
       }
       verificar_notificacoes_localizacao: {
         Args: { id_usuario: string; lat: number; lng: number }
