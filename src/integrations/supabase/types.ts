@@ -3092,6 +3092,66 @@ export type Database = {
         }
         Relationships: []
       }
+      premium_content: {
+        Row: {
+          access_level: string | null
+          content_type: string
+          content_url: string
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          model_id: string | null
+          price: number
+          thumbnail_url: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          access_level?: string | null
+          content_type?: string
+          content_url: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          model_id?: string | null
+          price?: number
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          access_level?: string | null
+          content_type?: string
+          content_url?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          model_id?: string | null
+          price?: number
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "premium_content_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "premium_content_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "popular_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       premium_members: {
         Row: {
           created_at: string | null
@@ -3315,6 +3375,33 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          action_type: string
+          count: number | null
+          created_at: string | null
+          id: string
+          identifier: string
+          window_start: string | null
+        }
+        Insert: {
+          action_type: string
+          count?: number | null
+          created_at?: string | null
+          id?: string
+          identifier: string
+          window_start?: string | null
+        }
+        Update: {
+          action_type?: string
+          count?: number | null
+          created_at?: string | null
+          id?: string
+          identifier?: string
+          window_start?: string | null
+        }
+        Relationships: []
+      }
       reacoes_evento: {
         Row: {
           data_criacao: string | null
@@ -3386,6 +3473,36 @@ export type Database = {
           product_name?: string
           sale_date?: string | null
           sale_value?: number
+        }
+        Relationships: []
+      }
+      security_audit_log: {
+        Row: {
+          created_at: string | null
+          event_type: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -4577,6 +4694,23 @@ export type Database = {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
+      check_rate_limit: {
+        Args: {
+          action_type: string
+          identifier: string
+          max_requests?: number
+          window_minutes?: number
+        }
+        Returns: boolean
+      }
+      cleanup_old_sessions: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_sensitive_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       detectar_movimento: {
         Args: { coordenadas: Json; id_usuario: string; velocidade: number }
         Returns: string
@@ -4594,13 +4728,29 @@ export type Database = {
         }
         Returns: string
       }
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_daily_points_status: {
         Args: { p_action_type: string; p_user_id: string }
         Returns: Json
       }
+      hash_sensitive_data: {
+        Args: { data: string }
+        Returns: string
+      }
       is_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      log_security_event: {
+        Args: { event_type: string; metadata?: Json }
+        Returns: undefined
+      }
+      monitor_suspicious_activity: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       processar_posts_agendados: {
         Args: Record<PropertyKey, never>
@@ -4634,6 +4784,10 @@ export type Database = {
       testar_sistema: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      track_user_activity: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       update_mission_progress: {
         Args: { p_action_type: string; p_increment?: number; p_user_id: string }
